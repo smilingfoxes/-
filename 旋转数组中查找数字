@@ -7,6 +7,7 @@
 // 如果查找的值存在，请返回数组下标。
 // 如果查找的值不存在，请返回-1。
 
+// method 1
 public int search(int[] nums, int target) {
         //先判断，有序的部分在左边，还是右边
         int i =0; 
@@ -27,6 +28,50 @@ public int search(int[] nums, int target) {
                     i = m+1;
                 }
 
+            }
+        }
+        return -1;
+    }
+    
+    
+  //method 2  
+ //最开始的思路：寻找旋转中心的做法：找到旋转中心，就得到两个有序的部分，分别进行二分查找
+    public int search(int[] nums, int target) {
+        
+        int center = findCenter(nums);
+        int res1 = binarySearch(nums,0,center-1,target);
+        int res2 = binarySearch(nums,center,nums.length-1,target);
+        if(res1!=-1) return res1;
+        if(res2!=-1) return res2;
+        return -1;
+    }
+    //寻找旋转中心
+    public int findCenter(int numbers[]){
+        int i = 0,j = numbers.length-1;
+        // int j = numbers.length-1;
+        while(i<j){
+            int m = (i+j)/2;
+            if(numbers[m]>numbers[j]){ 
+                i = m+1;                    //在旋转点左侧
+
+            }else if(numbers[m]<numbers[j]){
+                j = m ;                 //在旋转点右侧
+            }else{
+                // j = j-1;
+                j--;
+            }
+        }
+        return i;
+    }
+    //二分查找
+    public int binarySearch(int []nums,int i, int j,int target){
+        while(i<=j){
+            int m = (i+j)/2;
+            if(nums[m] == target) return m;
+            if(nums[m]<target){
+                i = m +1;
+            }else{
+                j = m -1;
             }
         }
         return -1;
